@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Build the Docker image
+                    docker.build("image-name:latest")
+
+                    // Push the Docker image to AWS ECR
+                    docker.withRegistry('https://ecr-url', 'ecr-credentials') {
+                        docker.image("image-name:latest").push()
+                    }
+                }
+            }
+        }
+    }
+}
